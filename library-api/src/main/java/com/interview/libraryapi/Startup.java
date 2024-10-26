@@ -1,13 +1,13 @@
-package com.interview.libraryapi.libraryapi;
+package com.interview.libraryapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LibraryApiApplication {
+public class Startup {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LibraryApiApplication.class, args);
+		SpringApplication.run(Startup.class, args);
 	}
 
 }
