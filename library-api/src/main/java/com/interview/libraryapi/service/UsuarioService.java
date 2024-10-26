@@ -12,5 +12,5 @@ public interface UsuarioService {
 
     public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO);
 
-    public void deletarUsuario(UsuarioDTO usuarioDTO);
+    public void deletarUsuario(Long id);
 }

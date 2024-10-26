@@ -4,8 +4,11 @@ import com.interview.libraryapi.exceptions.ExceptionResponse;
 import com.interview.libraryapi.exceptions.ParameterUpdateInvalid;
 import com.interview.libraryapi.exceptions.RequiredObjectIsNullException;
 import com.interview.libraryapi.exceptions.ResourceNotFoundException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @RestController
@@ -65,4 +72,24 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+
+        String targetSubstring = "default message";
+        int startIndex = ex.getMessage().lastIndexOf(targetSubstring);
+        String defaultMessage = ex.getMessage().substring(startIndex);
+        String result = defaultMessage.substring(defaultMessage.indexOf("[") + 1,  defaultMessage.indexOf("]"));
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                result,
+                request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, status);
+
+    }
+
 }

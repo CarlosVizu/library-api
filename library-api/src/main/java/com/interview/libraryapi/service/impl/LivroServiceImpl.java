@@ -35,20 +35,18 @@ public class LivroServiceImpl implements LivroService {
     }
 
     public LivroDTO atualizarLivro(LivroDTO livroDTO) {
-        validarLivroExiste(livroDTO);
+        validarLivroExiste(livroDTO.getId());
         repository.save(new Livro(livroDTO));
         return livroDTO;
     }
 
-    public void deletarLivro(LivroDTO livroDTO) {
-        Livro livro = validarLivroExiste(livroDTO);
+    public void deletarLivro(Long id) {
+        Livro livro = validarLivroExiste(id);
         repository.delete(livro);
     }
 
-    private Livro validarLivroExiste(LivroDTO livroDTO) {
-        if(livroDTO == null) throw new com.interview.libraryapi.exceptions.RequiredObjectIsNullException();
-
-        Optional<Livro> livro = repository.findById(livroDTO.getId());
+    private Livro validarLivroExiste(Long id) {
+        Optional<Livro> livro = repository.findById(id);
         if(!livro.isPresent()) {
             throw new com.interview.libraryapi.exceptions.ResourceNotFoundException("Nenhum livro encontrado.");
         }

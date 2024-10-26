@@ -43,19 +43,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
-        if(usuarioDTO == null) throw new RequiredObjectIsNullException();
+        Usuario usuario = validarUsuarioExiste(usuarioDTO.getId());
 
-        Optional<Usuario> usuario = repository.findById(usuarioDTO.getId());
-        if(!usuario.isPresent()) {
-            throw new ResourceNotFoundException("Nenhum usuário encontrado.");
-        }
-
-        if(!usuario.get().getEmail().equals(usuarioDTO.getEmail())) {
+        if(!usuario.getEmail().equals(usuarioDTO.getEmail())) {
             if(!FormatValidate.validarEmail(usuarioDTO.getEmail()))
                 throw new ParameterUpdateInvalid("Email informado é invalido: insira um endereço de email válido.");
         }
 
-        if(!usuario.get().getDataCadastro().equals(usuarioDTO.getDataCadastro())) {
+        if(!usuario.getDataCadastro().equals(usuarioDTO.getDataCadastro())) {
             if(!FormatValidate.validarDataAnteriorHoje(usuarioDTO.getDataCadastro()))
                 throw new ParameterUpdateInvalid("Data de cadastro inválida: Informe uma data anterior ou igual a atual.");
         }
@@ -65,12 +60,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioDTO;
     }
 
-    public void deletarUsuario(UsuarioDTO usuarioDTO) {
-        Optional<Usuario> usuario = repository.findById(usuarioDTO.getId());
+    public void deletarUsuario(Long id) {
+        Usuario usuario = validarUsuarioExiste(id);
+        repository.delete(usuario);
+    }
+
+    private Usuario validarUsuarioExiste(Long id) {
+        Optional<Usuario> usuario = repository.findById(id);
         if(!usuario.isPresent()) {
             throw new ResourceNotFoundException("Nenhum usuário encontrado.");
         }
-
-        repository.delete(usuario.get());
+        return usuario.get();
     }
 }

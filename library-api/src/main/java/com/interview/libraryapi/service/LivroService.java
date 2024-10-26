@@ -12,5 +12,5 @@ public interface LivroService {
 
     public LivroDTO atualizarLivro(LivroDTO livroDTO);
 
-    public void deletarLivro(LivroDTO livroDTO);
+    public void deletarLivro(Long id);
 }
