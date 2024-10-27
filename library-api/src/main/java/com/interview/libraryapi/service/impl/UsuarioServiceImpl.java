@@ -21,11 +21,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     UsuarioRepository repository;
 
-    public void salvarUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
         if (!FormatValidate.validarEmail(usuarioDTO.getEmail())) {
             throw new ParameterUpdateInvalid("Email informado é invalido: insira um endereço de email válido.");
         }
-        repository.save(new Usuario(usuarioDTO));
+        Usuario usuario = repository.save(new Usuario(usuarioDTO));
+        return new UsuarioDTO(usuario);
     }
 
     public List<UsuarioDTO> procurarUsuarioPorNome(String nome) {

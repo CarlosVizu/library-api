@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UsuarioService {
 
-    public void salvarUsuario(UsuarioDTO usuarioDTO);
+    public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO);
 
     public List<UsuarioDTO> procurarUsuarioPorNome(String nome);
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface LivroService {
 
-    public void salvarLivro(LivroDTO livroDTO);
+    public LivroDTO salvarLivro(LivroDTO livroDTO);
 
     public List<LivroDTO> procurarLivroPorTitulo(String nome);
 

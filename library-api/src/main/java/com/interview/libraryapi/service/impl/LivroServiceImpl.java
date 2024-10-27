@@ -17,8 +17,9 @@ public class LivroServiceImpl implements LivroService {
     @Autowired
     LivroRepository repository;
 
-    public void salvarLivro(LivroDTO livroDTO) {
-        repository.save(new Livro(livroDTO));
+    public LivroDTO salvarLivro(LivroDTO livroDTO) {
+        Livro livro = repository.save(new Livro(livroDTO));
+        return new LivroDTO(livro);
     }
 
     public List<LivroDTO> procurarLivroPorTitulo(String nome) {
