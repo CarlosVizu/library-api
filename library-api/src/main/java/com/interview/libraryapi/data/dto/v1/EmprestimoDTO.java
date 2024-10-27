@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.interview.libraryapi.model.Emprestimo;
 import com.interview.libraryapi.model.Livro;
 import com.interview.libraryapi.model.Usuario;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;

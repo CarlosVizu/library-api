@@ -5,6 +5,9 @@ import com.interview.libraryapi.model.Livro;
 import com.interview.libraryapi.repositories.LivroRepository;
 import com.interview.libraryapi.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,6 +55,22 @@ public class LivroServiceImpl implements LivroService {
             throw new com.interview.libraryapi.exceptions.ResourceNotFoundException("Nenhum livro encontrado.");
         }
         return livro.get();
+    }
+
+    public List<LivroDTO> retornarLivrosRecomendados(String categoriaFavorita, List<Long> historicoLivros) {
+        Page<Livro> livrosRecomendados = repository.buscarLivrosRecomendados(categoriaFavorita, historicoLivros, PageRequest.of(0, 5));
+
+        if(categoriaFavorita == null) {
+            livrosRecomendados = repository.buscarLivrosRecomendados(PageRequest.of(0, 5));
+        }
+
+        List<LivroDTO> livrosRecomendadosDTO = new ArrayList<>();
+        if(livrosRecomendados.hasContent()) {
+            for(Livro livro : livrosRecomendados.getContent()) {
+                livrosRecomendadosDTO.add(new LivroDTO(livro));
+            }
+        }
+        return livrosRecomendadosDTO;
     }
 
 }

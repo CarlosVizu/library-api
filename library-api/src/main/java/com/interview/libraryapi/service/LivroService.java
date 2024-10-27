@@ -16,4 +16,6 @@ public interface LivroService {
     public void deletarLivro(Long id);
 
     public Livro validarLivroExiste(Long id);
+
+    public List<LivroDTO> retornarLivrosRecomendados(String categoriaFavorita, List<Long> historicoLivros);
 }

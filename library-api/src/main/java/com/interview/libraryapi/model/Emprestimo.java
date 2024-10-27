@@ -37,6 +37,7 @@ public class Emprestimo implements Serializable {
     }
 
     public Emprestimo(EmprestimoDTO emprestimoDTO, Usuario usuario, Livro livro) {
+        id = emprestimoDTO.getId();
         this.usuario = usuario;
         this.livro = livro;
         dataEmprestimo = emprestimoDTO.getDataEmprestimo();
