@@ -1,4 +1,4 @@
-package com.com.interview.libraryapi.libraryapi;
+package com.interview.libraryapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

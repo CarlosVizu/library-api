@@ -17,7 +17,7 @@ public class FormatValidate {
     public static boolean validarDataAnteriorHoje(Date data) {
         Calendar calendario = Calendar.getInstance();
         calendario.add(Calendar.DAY_OF_YEAR, 1);
-        Date dataAtual = new Date();
+        Date dataAtual = calendario.getTime();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
