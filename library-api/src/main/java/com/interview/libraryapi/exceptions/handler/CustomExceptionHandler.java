@@ -1,9 +1,6 @@
 package com.interview.libraryapi.exceptions.handler;
 
-import com.interview.libraryapi.exceptions.ExceptionResponse;
-import com.interview.libraryapi.exceptions.ParameterUpdateInvalid;
-import com.interview.libraryapi.exceptions.RequiredObjectIsNullException;
-import com.interview.libraryapi.exceptions.ResourceNotFoundException;
+import com.interview.libraryapi.exceptions.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -90,6 +87,18 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<>(exceptionResponse, status);
 
+    }
+
+    @ExceptionHandler(EmprestimoNaoRealizadoException.class)
+    public final ResponseEntity<ExceptionResponse> handleEmprestimoNaoRealizado(
+            Exception ex, WebRequest request) {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

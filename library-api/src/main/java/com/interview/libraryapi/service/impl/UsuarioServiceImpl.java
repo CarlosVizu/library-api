@@ -66,7 +66,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         repository.delete(usuario);
     }
 
-    private Usuario validarUsuarioExiste(Long id) {
+    public Usuario validarUsuarioExiste(Long id) {
         Optional<Usuario> usuario = repository.findById(id);
         if(!usuario.isPresent()) {
             throw new ResourceNotFoundException("Nenhum usuário encontrado.");

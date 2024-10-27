@@ -46,7 +46,7 @@ public class LivroServiceImpl implements LivroService {
         repository.delete(livro);
     }
 
-    private Livro validarLivroExiste(Long id) {
+    public Livro validarLivroExiste(Long id) {
         Optional<Livro> livro = repository.findById(id);
         if(!livro.isPresent()) {
             throw new com.interview.libraryapi.exceptions.ResourceNotFoundException("Nenhum livro encontrado.");
