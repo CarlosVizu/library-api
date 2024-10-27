@@ -44,6 +44,8 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         if(!emprestimoDTO.getStatus().equals((StatusEnum.DISPONIVEL.getDescricao())) && !emprestimoDTO.getStatus().equals(StatusEnum.INDISPONIVEL.getDescricao()))
             throw new ParameterUpdateInvalid("Emprestimo inválido: Informar 'DISPONIVEL' ou 'INDISPONIVEL' no campo Status");
 
+        if(FormatValidate.validarDataPosteriorHoje(emprestimoDTO.getDataEmprestimo()))
+            throw new ParameterUpdateInvalid("Emprestimo inválido: Data de Emprestimo deve ser igual ou anterior à data atual.");
 
         Emprestimo emprestimo = repository.save(new Emprestimo(emprestimoDTO, usuario, livro));
         return new EmprestimoDTO(emprestimo);

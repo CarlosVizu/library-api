@@ -125,6 +125,28 @@ public class EmprestimoServiceTest {
     }
 
     @Test
+    public void EmprestimoService_salvarEmprestimo_FalhaDataEmprestiomoPosteriorAtual(){
+        EmprestimoDTO emprestimoDTO = EmprestimoMock.emprestimoDTOMock();
+        Usuario usuario = UsuarioMock.usuarioValido();
+        Livro livro = LivroMock.livroValido();
+        Page<Emprestimo> emprestimoDisponivel = EmprestimoMock.emprestimoPageMockDisponivel();
+
+        Calendar calendario = Calendar.getInstance();
+        calendario.add(Calendar.DAY_OF_YEAR, +1);
+        emprestimoDTO.setDataEmprestimo(calendario.getTime());
+
+        when(usuarioService.validarUsuarioExiste(emprestimoDTO.getUsuarioId())).thenReturn(usuario);
+        when(livroService.validarLivroExiste(emprestimoDTO.getLivroId())).thenReturn(livro);
+        when(repository.procurarUltimoEmprestimoPorLivro(livro.getId(), PageRequest.of(0, 1)))
+                .thenReturn(emprestimoDisponivel);
+
+        Throwable exception = assertThrows(ParameterUpdateInvalid.class,
+                () -> emprestimoService.salvarEmprestimo(emprestimoDTO));
+
+        assertEquals("Emprestimo inválido: Data de Emprestimo deve ser igual ou anterior à data atual.", exception.getMessage());
+    }
+
+    @Test
     public void EmprestimoService_atualizarEmprestimo_RetornaDTO() {
         EmprestimoDTO emprestimoDTO = EmprestimoMock.emprestimoDTOMock();
         Usuario usuario = UsuarioMock.usuarioValido();

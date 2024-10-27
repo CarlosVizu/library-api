@@ -40,4 +40,22 @@ public class FormatValidate {
         return formattedDate1.equals(formattedDate2);
     }
 
+    public static boolean validarDataPosteriorHoje(Date data) {
+        Calendar calendario = Calendar.getInstance();
+        Date dataAtual = calendario.getTime();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            Date dataFormatada = dateFormat.parse(dateFormat.format(data));
+            Date dataAtualFormatada = dateFormat.parse(dateFormat.format(dataAtual));
+
+            return dataFormatada.after(dataAtualFormatada);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
