@@ -16,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.*;
 
@@ -114,5 +117,33 @@ public class LivroServiceTest {
                 () -> livroService.deletarLivro(livroDTO.getId()));
         assertEquals("Nenhum livro encontrado.", exception.getMessage());
 
+    }
+
+    @Test
+    public void LivroService_retornarLivrosRecomendados_UsuarioComHistorico() {
+        Page<Livro> livrosRecomendados = LivroMock.listaRecomendacaoFiccao();
+        String categoria = "Ficção";
+        List<Long> historicoLivrosId = new ArrayList<>(Arrays.asList(5L,12L,17L,18L,2L));
+
+        when(livroRepository.buscarLivrosRecomendados(categoria, historicoLivrosId, PageRequest.of(0, 5)))
+                .thenReturn(livrosRecomendados);
+
+        List<LivroDTO> livrosRecomendadosDTO = livroService.retornarLivrosRecomendados(categoria, historicoLivrosId);
+        Assertions.assertThat(livrosRecomendadosDTO).isNotNull();
+    }
+
+    @Test
+    public void LivroService_retornarLivrosRecomendados_UsuarioSemHistorico() {
+        Page<Livro> livrosRecomendados = LivroMock.listaRecomendacaoFiccao();
+        String categoria = null;
+        List<Long> historicoLivrosId = new ArrayList<>(Arrays.asList(5L,12L,17L,18L,2L));
+
+        when(livroRepository.buscarLivrosRecomendados(categoria, historicoLivrosId, PageRequest.of(0, 5)))
+                .thenReturn(null);
+        when(livroRepository.buscarLivrosRecomendados(PageRequest.of(0, 5)))
+                .thenReturn(livrosRecomendados);
+
+        List<LivroDTO> livrosRecomendadosDTO = livroService.retornarLivrosRecomendados(categoria, historicoLivrosId);
+        Assertions.assertThat(livrosRecomendadosDTO).isNotNull();
     }
 }

@@ -29,4 +29,17 @@ public class UsuarioMock {
 
         return usuarioDTO;
     }
+
+    public static Usuario usuarioValidoEmprestimo(){
+        Usuario usuario = new Usuario();
+        usuario.setId(2L);
+        usuario.setEmail("carlos.vizu@dominio.com");
+        usuario.setDataCadastro(new Date());
+        usuario.setNome("Carlos Vizu");
+        usuario.setTelefone("43999999999");
+
+        return usuario;
+    }
+
+
 }

@@ -61,10 +61,10 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     }
 
     public boolean islivroDisponivel(Long livroId) {
-        Page<Emprestimo> restultado = repository.procurarUltimoEmprestimoPorLivro(livroId, PageRequest.of(0, 1));
+        Page<Emprestimo> resultado = repository.procurarUltimoEmprestimoPorLivro(livroId, PageRequest.of(0, 1));
         Emprestimo emprestimo = null;
-        if(restultado.hasContent())
-            emprestimo = restultado.getContent().get(0);
+        if(resultado.hasContent())
+            emprestimo = resultado.getContent().get(0);
 
         if(emprestimo != null) {
         //Se há registro de emprestimo, então o único status de disponibilidade é o DISPONIVEL_DEVOLVIDO
@@ -93,20 +93,19 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         if(!emprestimoDTO.getUsuarioId().equals(emprestimo.getUsuario().getId()))
             throw new ParameterUpdateInvalid("Atualização inválida: Não é possível alterar o Usuário de empréstimo.");
 
-        if(!emprestimoDTO.getDataEmprestimo().equals(emprestimo.getDataEmprestimo()))
-            throw new ParameterUpdateInvalid("Atualização inválida: Não é possível alterar a Data de Devolução.");
+        if(!FormatValidate.isDatasIguais(emprestimoDTO.getDataEmprestimo(), emprestimo.getDataEmprestimo()))
+            throw new ParameterUpdateInvalid("Atualização inválida: Não é possível alterar a Data de Empréstimo.");
 
         if(!emprestimoDTO.getStatus().equals((StatusEnum.DISPONIVEL.getDescricao())) && !emprestimoDTO.getStatus().equals(StatusEnum.INDISPONIVEL.getDescricao()))
             throw new ParameterUpdateInvalid("Atualização inválida: Informar 'DISPONIVEL' ou 'INDISPONIVEL' no campo Status");
 
         if(!emprestimoDTO.getDataDevolucao().equals(emprestimo.getDataDevolucao()))
-            if(!FormatValidate.validarDataAnteriorHoje(emprestimoDTO.getDataDevolucao())) {
+            if(FormatValidate.validarDataAnteriorHoje(emprestimoDTO.getDataDevolucao())) {
                 throw new ParameterUpdateInvalid("Atualização inválida: A data de devolução deve ser igual ou posterior à data atual.");
             };
     }
 
     public List<LivroDTO> recomendarLivros(Long usuarioId) {
-
         List<Livro> historicoLivros = repository.procurarTodosLivrosEmprestadosPorUsuario(usuarioId);
 
         List<String> categoria = new ArrayList<>();
