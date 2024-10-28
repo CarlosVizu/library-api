@@ -30,7 +30,8 @@ public class EmprestimoController {
         return service.atualizarEmprestimo(emprestimoDTO);
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON})
+    @GetMapping(path = "/recomendar",
+            produces = {MediaType.APPLICATION_JSON})
     public List<LivroDTO> recomendarLivros(@Param(value = "usuarioId") Long usuarioId) {
         return service.recomendarLivros(usuarioId);
     }
