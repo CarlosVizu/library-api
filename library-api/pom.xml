@@ -69,6 +69,16 @@
 			<version>5.10.5</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-books</artifactId>
+			<version>v1-rev20201021-1.30.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.7.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
