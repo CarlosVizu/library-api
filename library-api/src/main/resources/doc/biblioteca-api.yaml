@@ -1,0 +1,516 @@
+openapi: 3.0.3
+info:
+  title: Biblioteca API
+  description: API para gerenciamento de recursos de biblioteca, incluindo empréstimos, livros e usuários.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /api/emprestimo/v1:
+    post:
+      summary: Criar um novo empréstimo
+      description: Cria um novo registro de empréstimo.
+      tags:
+        - Empréstimo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuarioId:
+                  type: integer
+                  example: 2
+                  description: "ID do usuário realizando o empréstimo"
+                livroId:
+                  type: integer
+                  example: 18
+                  description: "ID do livro a ser emprestado"
+                dataEmprestimo:
+                  type: string
+                  format: date
+                  example: "10/10/2024"
+                  description: "Data de início do empréstimo no formato dd/MM/yyyy"
+                dataDevolucao:
+                  type: string
+                  format: date
+                  example: "24/10/2024"
+                  description: "Data de devolução do empréstimo no formato dd/MM/yyyy"
+                status:
+                  type: string
+                  example: "INDISPONIVEL"
+                  description: "Status do empréstimo (ex.: 'DISPONIVEL' ou 'INDISPONIVEL')"
+              required:
+                - usuarioId
+                - livroId
+                - dataEmprestimo
+                - dataDevolucao
+                - status
+              
+      responses:
+        '200':
+          description: Empréstimo criado com sucesso
+
+    put:
+      summary: Atualizar um empréstimo
+      description: Atualiza um registro de empréstimo existente.
+      tags:
+        - Empréstimo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 13
+                  description: "ID do empréstimo"
+                usuarioId:
+                  type: integer
+                  example: 5
+                  description: "ID do usuário realizando o empréstimo"
+                livroId:
+                  type: integer
+                  example: 5
+                  description: "ID do livro a ser emprestado"
+                dataEmprestimo:
+                  type: string
+                  format: date
+                  example: "05/10/2024"
+                  description: "Data de início do empréstimo no formato dd/MM/yyyy"
+                dataDevolucao:
+                  type: string
+                  format: date
+                  example: "19/10/2024"
+                  description: "Data de devolução do empréstimo no formato dd/MM/yyyy"
+                status:
+                  type: string
+                  example: "DISPONIVEL"
+                  description: "Status do empréstimo (ex.: 'DISPONIVEL' ou 'INDISPONIVEL')"
+              required:
+                - usuarioId
+                - livroId
+                - dataEmprestimo
+                - dataDevolucao
+                - status
+      responses:
+        '200':
+          description: Empréstimo atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmprestimoDTO'
+  /api/emprestimo/v1/recomendar:
+    get:
+      summary: Recomendar livros para um usuário
+      description: Recupera recomendações de livros para um usuário específico.
+      tags:
+        - Empréstimo
+      parameters:
+        - name: usuarioId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de livros recomendados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LivroDTO'
+
+  /api/livro/v1:
+    get:
+      summary: Buscar livros por título
+      description: Recupera uma lista de livros com base no título fornecido.
+      tags:
+        - Livro
+      parameters:
+        - name: titulo
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de livros correspondentes ao título
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LivroDTO'
+
+    post:
+      summary: Salvar um novo livro
+      description: Salva um novo registro de livro.
+      tags:
+        - Livro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  titulo:
+                    type: string
+                    example: "Drácula"
+                    description: "Título do livro"
+                  isbn:
+                    type: string
+                    pattern: "^[0-9]+$"
+                    description: "ISBN (somente números, obrigatório)"
+                    maxLength: 13
+                  dataPublicacao:
+                    type: string
+                    format: date
+                    example: "01/10/2003"
+                    description: "Data de publicação do livro no formato dd/MM/yyyy"
+                  categoria:
+                    type: string
+                    example: "Terror"
+                    description: "Categoria do livro"
+                  autor:
+                    type: string
+                    example: "Bram Stoker"
+                    description: "Autor do livro"
+                required:
+                  - titulo
+                  - isbn
+                  - dataPublicacao
+                  - categoria
+                  - autor
+      responses:
+        '200':
+          description: Livro salvo com sucesso
+
+    put:
+      summary: Atualizar um livro
+      description: Atualiza um registro de livro existente.
+      tags:
+        - Livro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 20
+                    description: "ID do livro"
+                  titulo:
+                    type: string
+                    example: "Drácula"
+                    description: "Título do livro"
+                  isbn:
+                    type: string
+                    pattern: "^[0-9]+$"
+                    description: "ISBN (somente números, obrigatório)"
+                    maxLength: 13
+                  dataPublicacao:
+                    type: string
+                    format: date
+                    example: "01/10/2003"
+                    description: "Data de publicação do livro no formato dd/MM/yyyy"
+                  categoria:
+                    type: string
+                    example: "Terror"
+                    description: "Categoria do livro"
+                  autor:
+                    type: string
+                    example: "Bram Stoker"
+                    description: "Autor do livro"
+                required:
+                  - id
+                  - titulo
+                  - isbn
+                  - dataPublicacao
+                  - categoria
+                  - autor
+      responses:
+        '200':
+          description: Livro atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivroDTO'
+
+    delete:
+      summary: Deletar um livro
+      description: Deleta um registro de livro existente.
+      tags:
+        - Livro
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Livro deletado com sucesso
+
+  /api/usuario/v1:
+    get:
+      summary: Buscar usuários por nome
+      description: Recupera uma lista de usuários com base no nome fornecido.
+      tags:
+        - Usuário
+      parameters:
+        - name: nome
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de usuários correspondentes ao nome
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioDTO'
+
+    post:
+      summary: Salvar um novo usuário
+      description: Salva um novo registro de usuário.
+      tags:
+        - Usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "João Silva"
+                  description: "Nome do usuário"
+                email:
+                  type: string
+                  format: email
+                  example: "joao.silva@example.com"
+                  description: "Email do usuário"
+                dataCadastro:
+                  type: string
+                  example: "25/10/2024"
+                  pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$"
+                  description: "Data de Cadastro (formato: dd/MM/yyyy)"
+                telefone:
+                  type: string
+                  example: "43324512354"
+                  pattern: "^[0-9]{1,13}$"
+                  description: "Telefone do usuário (apenas números, máximo 13 caracteres)"
+              required:
+                - nome
+                - email
+                - dataCadastro
+                - telefone
+      responses:
+        '200':
+          description: Usuário salvo com sucesso
+
+    put:
+      summary: Atualizar um usuário
+      description: Atualiza um registro de usuário existente.
+      tags:
+        - Usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 
+                nome:
+                  type: string
+                  example: "João Silva"
+                  description: "Nome do usuário"
+                email:
+                  type: string
+                  format: email
+                  example: "joao.silva@example.com"
+                  description: "Email do usuário"
+                dataCadastro:
+                  type: string
+                  example: "25/10/2024"
+                  pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$"
+                  description: "Data de Cadastro (formato: dd/MM/yyyy)"
+                telefone:
+                  type: string
+                  example: "43324512354"
+                  pattern: "^[0-9]{1,13}$"
+                  description: "Telefone do usuário (apenas números, máximo 13 caracteres)"
+              required:
+                - nome
+                - email
+                - dataCadastro
+                - telefone
+      responses:
+        '200':
+          description: Usuário atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+
+    delete:
+      summary: Deletar um usuário
+      description: Deleta um registro de usuário existente.
+      tags:
+        - Usuário
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuário deletado com sucesso
+
+  /api/book/v1:
+    get:
+      summary: Buscar livros na API do Google
+      description: Busca livros pela API do Google com base no título fornecido.
+      tags:
+        - Book
+      parameters:
+        - name: titulo
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de livros da API do Google
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LivroDTO'
+
+    post:
+      summary: Salvar livro da API por ID
+      description: Salva um livro da API do Google pelo ID fornecido.
+      tags:
+        - Book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "20"
+                  description: "ID do livro na API do Google"
+      responses:
+        '200':
+          description: Livro salvo com sucesso na biblioteca local
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivroDTO'
+                
+components:
+  schemas:
+    EmprestimoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        usuarioId:
+          type: integer
+          description: "ID do Usuário"
+        nomeUsuario:
+          type: string
+          description: "Nome do Usuário"
+        livroId:
+          type: integer
+          description: "ID do Livro"
+        tituloLivro:
+          type: string
+          description: "Título do Livro"
+        autor:
+          type: string
+          description: "Autor do Livro"
+        dataEmprestimo:
+          type: string
+          format: date
+          description: "Data do Empréstimo (dd/MM/yyyy)"
+        dataDevolucao:
+          type: string
+          format: date
+          description: "Data de Devolução (dd/MM/yyyy)"
+        status:
+          type: string
+          description: "Status do Empréstimo válidos: DISPONIVEL ou INDISPONIVEL"
+
+    LivroDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        titulo:
+          type: string
+          description: "Título do Livro (obrigatório)"
+        autor:
+          type: string
+          description: "Autor do Livro (obrigatório)"
+        isbn:
+          type: string
+          pattern: "^[0-9]+$"
+          description: "ISBN (somente números, obrigatório)"
+          maxLength: 13
+        dataPublicacao:
+          type: string
+          format: date
+          description: "Data de Publicação (dd/MM/yyyy, obrigatório)"
+        categoria:
+          type: string
+          description: "Categoria do Livro (obrigatório)"
+
+    UsuarioDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+          description: "Nome do Usuário (obrigatório)"
+        email:
+          type: string
+          description: "Email do Usuário (obrigatório)"
+        dataCadastro:
+          type: string
+          format: date
+          description: "Data de Cadastro (dd/MM/yyyy, obrigatório)"
+        telefone:
+          type: string
+          pattern: "^[0-9]+$"
+          description: "Telefone (somente números, obrigatório)"
+          maxLength: 12
+
